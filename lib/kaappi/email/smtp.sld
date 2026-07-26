@@ -74,7 +74,7 @@
     (define (tls-connect-upgrade conn) conn)
 
     (define (smtp-auth-plain smtp user pass)
-      (let* ((creds (string-append "\x00" user "\x00" pass))
+      (let* ((creds (string-append "\x00;" user "\x00;" pass))
              (encoded (base64-encode creds)))
         (smtp-command smtp (string-append "AUTH PLAIN " encoded))))
 
