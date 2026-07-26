@@ -21,17 +21,25 @@ jobs:
         with:
           version: 0.16.0
 
-      - name: Build Kaappi
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y libssl-dev
+
+      - name: Build Kaappi and kaappi-net
         run: |
           git clone --depth 1 https://github.com/kaappi/kaappi.git /tmp/kaappi
           cd /tmp/kaappi && zig build
+          git clone --depth 1 https://github.com/kaappi/kaappi-net.git /tmp/kaappi-net
+          cd /tmp/kaappi-net && make
 
       - name: Run tests
         run: |
           for f in tests/*.scm; do
             echo "=== $f ==="
-            /tmp/kaappi/zig-out/bin/kaappi --coverage-xml coverage.xml --lib-path lib "$f"
+            /tmp/kaappi/zig-out/bin/kaappi --coverage-xml coverage.xml --lib-path lib --lib-path /tmp/kaappi-net/lib "$f"
           done
+        env:
+          LD_LIBRARY_PATH: /tmp/kaappi-net
+          DYLD_LIBRARY_PATH: /tmp/kaappi-net
 
       - name: Upload to Codecov
         if: github.event_name == 'push'
