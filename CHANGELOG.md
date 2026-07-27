@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-07-27
+
 ### Fixed
 - SMTP transport never worked: `smtp-send`/`smtp-receive` called
   kaappi-net's `tcp-send`/`tcp-recv`/`tls-send`/`tls-recv` with the wrong
