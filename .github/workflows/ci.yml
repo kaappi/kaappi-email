@@ -41,6 +41,17 @@ jobs:
           LD_LIBRARY_PATH: /tmp/kaappi-net
           DYLD_LIBRARY_PATH: /tmp/kaappi-net
 
+      # Real socket round-trip against a local sink — the arity bug this
+      # guards against was invisible to any test that never moved bytes.
+      - name: Run SMTP round-trip test
+        timeout-minutes: 3
+        run: bash tests/test-smtp-roundtrip.sh
+        env:
+          KAAPPI: /tmp/kaappi/zig-out/bin/kaappi
+          NET_LIB: /tmp/kaappi-net/lib
+          LD_LIBRARY_PATH: /tmp/kaappi-net
+          DYLD_LIBRARY_PATH: /tmp/kaappi-net
+
       - name: Upload to Codecov
         if: github.event_name == 'push'
         uses: codecov/codecov-action@v5
